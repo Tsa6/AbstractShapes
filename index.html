@@ -50,7 +50,10 @@ Direct inqueries to tsa6games@gmail.com
             }
             
             function mouseClicked() {
-                shapes[shapes.length] = new Shape();
+                var shape = new Shape();
+                shape.x = mouseX;
+                shape.y = mouseY;
+                shapes[shapes.length] = shape;
             }
             
             function windowResized() {
