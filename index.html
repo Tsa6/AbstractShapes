@@ -31,12 +31,18 @@ Direct inqueries to tsa6games@gmail.com
             var SAT_MIN = 40;
             var SAT_MAX = 40;
             var BRI_MIN = 100;
-            var BRI_MAX = 100
+            var BRI_MAX = 100;
+            var PERIOD = 500;
             
             var shapes = [];
+            var spawnIntervalId;
             
             function setup() {
                 createCanvas(windowWidth, windowHeight);
+                if(PERIOD)
+                    spawnIntervalId = setInterval(function() {
+                        shapes[shapes.length] = new Shape();
+                },PERIOD)
             }
             
             function draw() {
