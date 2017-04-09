@@ -1,0 +1,134 @@
+<!Doctype HTML>
+<!--
+Copyright (c) 2017 Taizo 'Tsa6' Simpson
+All rights reserved.
+Direct inqueries to tsa6games@gmail.com
+-->
+<html>
+    <head>
+        <style>
+            body {
+                overflow: hidden;
+            }
+            
+            canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="p5.min.js"></script>
+        <script>
+            
+            var SPEED = 0.01;
+            var MODE = 0;
+            var R_MIN = 10;
+            var R_MAX = 100;
+            var HUE_MIN = 0;
+            var HUE_MAX = 360;
+            var SAT_MIN = 40;
+            var SAT_MAX = 40;
+            var BRI_MIN = 100;
+            var BRI_MAX = 100
+            
+            var shapes = [];
+            
+            function setup() {
+                createCanvas(windowWidth, windowHeight);
+            }
+            
+            function draw() {
+                for(var i = 0; i < shapes.length; i++) {
+                    var shape = shapes[i];
+                    shapes[i].draw();
+                    if(shape.currentPercent >= 1) {
+                        shapes.splice(i, 1)
+                    }
+                }
+            }
+            
+            function mouseClicked() {
+                shapes[shapes.length] = new Shape();
+            }
+            
+            function windowResized() {
+                resizeCanvas(windowWidth, windowHeight);
+            }
+            
+            function Shape() {
+                this.color = generateColor();
+                this.currentPercent = 0;
+                this.bezierPoints = [[0,0,.5,1],[0,0.6,1,1]]
+                
+                switch(MODE) {
+                    case 0:
+                        this.x = random(width);
+                        this.y = random(height);
+                        this.r = random(R_MIN, R_MAX)
+                        break;
+                }
+                
+                this.draw = function() {
+                    if(this.currentPercent < 1) {
+                        this.currentPercent += SPEED;
+                        this._draw(this._mapPercent(this.currentPercent));
+                    }
+                }
+                
+                this._draw = function(mappedPercent) {
+                    switch(MODE) {
+                        case 0:
+                            fill(this.color)
+                            noStroke();
+                            ellipse(this.x, this.y, mappedPercent * 2 * this.r);
+                            break;
+                    }
+                }
+            
+                this._mapPercent = function(x) {
+                    return calcBezier(invBezier(x, 0.0001, this.bezierPoints[0]),this.bezierPoints[1])
+                }
+                
+            }
+            
+            function generateColor() {
+                colorMode(HSB,360,100,100);
+                return color(
+                    random(HUE_MIN,HUE_MAX),
+                    random(SAT_MIN,SAT_MAX),
+                    random(BRI_MIN,BRI_MAX)
+                )
+            }
+            
+            function calcBezier(t, points) {
+                if(points.length === 1) {
+                    return points[0];
+                }else if(points.length < 1) {
+                    throw new Error("Illegal Argument:  Bezier curves need at least one point");
+                }else {
+                    return (1-t) * calcBezier(t, points.slice(0, points.length - 1)) + t * calcBezier(t, points.slice(1, points.length));
+                }
+            }
+            
+            function invBezier(x, tol, points) {
+                var min = 0;
+                var max = 1;
+                while(Math.abs(min-max) > tol) {
+                    var index = (min + max)/2;
+                    var atIndex = calcBezier(index, points);
+                    if(atIndex > x) {
+                        max = index;
+                    }else if(atIndex < x) {
+                        min = index;
+                    }else{//Yeah, right
+                        return index;
+                    }
+                }
+                return (min + max)/2
+            }
+            
+        </script>
+    </body>
+</html>
