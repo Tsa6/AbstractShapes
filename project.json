@@ -1,22 +1,128 @@
 {
+	"title" : "Abstract",
 	"description" : "A whole bunch of randomly generated circles.",
+	"preview" : "preview.jpg",
+	"tags" : [ "Relaxing" ],
+	"type" : "web",
+	"visibility" : "public",
 	"file" : "index.html",
 	"general" : 
 	{
 		"properties" : 
 		{
+            "menu": {
+                "order": 0,
+                "text": "Menu",
+                "type": "combo",
+                "value": 0,
+                "options": [
+                    {
+                        "label": "Select Menu",
+                        "value": 0
+                    },
+                    {
+                        "label": "Colors",
+                        "value": 1
+                    },
+                    {
+                        "label": "Spawning",
+                        "value": 2
+                    }
+                ]
+            },
+            "hueMin": {
+                "order": 100,
+                "text": "Minimum Hue",
+                "type": "slider",
+                "value": 0,
+                "min": -360,
+                "max": 360,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "hueMax": {
+                "order": 101,
+                "text": "Maximum Hue",
+                "type": "slider",
+                "value": 360,
+                "min": -360,
+                "max": 360,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "satMin": {
+                "order": 102,
+                "text": "Minimum Saturation",
+                "type": "slider",
+                "value": 40,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "satMax": {
+                "order": 103,
+                "text": "Maximum Saturation",
+                "type": "slider",
+                "value": 40,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "briMin": {
+                "order": 104,
+                "text": "Minimum Brightness",
+                "type": "slider",
+                "value": 100,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "briMax": {
+                "order": 105,
+                "text": "Maximum Brightness",
+                "type": "slider",
+                "value": 100,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1"
+            },
+            "freq": {
+                "order": 200,
+                "text": "Spawn Rate",
+                "type": "slider",
+                "value": 60,
+                "min": 0,
+                "max": 100,
+                "condition": "menu.value === 2"
+            },
+            "enableOnClick": {
+                "order": 201,
+                "text": "Spawn on click",
+                "type": "bool",
+                "value": true,
+                "condition": "menu.value === 2"
+            },
+            "speed": {
+                "order": 202,
+                "text": "Growth Speed",
+                "type": "slider",
+                "value": 10,
+                "min": 1,
+                "max": 100,
+                "condition": "menu.value === 2"
+            },
 			"schemecolor" : 
 			{
-				"order" : 0,
+				"order" : 999,
 				"text" : "ui_browse_properties_scheme_color",
 				"type" : "color",
-				"value" : "0 0 0"
+				"value" : "255 255 255",
+                "condition": "!menu.value"
 			}
 		}
-	},
-	"preview" : "preview.jpg",
-	"tags" : [ "Relaxing" ],
-	"title" : "Abstract",
-	"type" : "web",
-	"visibility" : "public"
+	}
 }

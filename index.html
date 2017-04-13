@@ -32,7 +32,7 @@ Direct inqueries to tsa6games@gmail.com
             var SAT_MAX = 40;
             var BRI_MIN = 100;
             var BRI_MAX = 100;
-            var FREQ = 6; //Value between 0 and 10, logarithmicly controls spawn rate
+            var FREQ = 60; //Value between 0 and 100, logarithmicly controls spawn rate
             var ENABLE_ON_CLICK = true;
             
             var shapes = [];
@@ -105,10 +105,12 @@ Direct inqueries to tsa6games@gmail.com
             
             function generateColor() {
                 colorMode(HSB,360,100,100);
+                var hue = random(HUE_MIN,HUE_MAX)%360;
+                hue = hue<0?hue+360:hue;
                 return color(
-                    random(HUE_MIN,HUE_MAX),
-                    random(SAT_MIN,SAT_MAX),
-                    random(BRI_MIN,BRI_MAX)
+                    hue,
+                    random(SAT_MIN,SAT_MAX)%360,
+                    random(BRI_MIN,BRI_MAX)%360
                 )
             }
             
@@ -146,7 +148,40 @@ Direct inqueries to tsa6games@gmail.com
                 if(FREQ) {
                     spawnIntervalId = setInterval(function() {
                         shapes[shapes.length] = new Shape();
-                    }, 1e3/(Math.pow(3.7,FREQ)*1e-9*width*height + 3e-3));
+                    }, 1e3/(Math.pow(3.7,FREQ/10)*1e-9*width*height + 3e-3));
+                }
+            }
+            
+            wallpaperPropertyListener = {
+                applyUserProperties: function(props) {
+                    if(props.hueMin) {
+                        HUE_MIN = props.hueMin.value;
+                    }
+                    if(props.hueMax) {
+                        HUE_MAX = props.hueMax.value;
+                    }
+                    if(props.satMin) {
+                        SAT_MIN = props.satMin.value;
+                    }
+                    if(props.satMax) {
+                        SAT_MAX = props.satMax.value;
+                    }
+                    if(props.briMin) {
+                        BRI_MIN = props.briMin.value;
+                    }
+                    if(props.briMax) {
+                        BRI_MAX = props.briMax.value;
+                    }
+                    if(props.freq) {
+                        FREQ = props.freq.value;
+                        resetSpawnInterval();
+                    }
+                    if(props.enableOnClick) {
+                        ENABLE_ON_CLICK = props.enableOnClick.value;
+                    }
+                    if(props.speed) {
+                        SPEED = props.speed.value/1000;
+                    }
                 }
             }
             
