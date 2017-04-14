@@ -52,7 +52,8 @@ Direct inqueries to tsa6games@gmail.com
                 sat: [40, 40],
                 bri: [100,100],
                 img: {
-                    url: "http://i.imgur.com/3FSu0pb.png",
+                    url: "https://i.imgur.com/XUIvn2G.png",
+                    centered: true,
                     x: 0,
                     y: 0
                 }
@@ -104,8 +105,8 @@ Direct inqueries to tsa6games@gmail.com
                         g.endShape();
                         canvasI.mask = g.get();
                     }else if(canvasI.img) {
-                        canvasI.minX = canvasI.img.x;
-                        canvasI.minY = canvasI.img.y;
+                        canvasI.minX = canvasI.img.centered?(width - canvasI.mask.width)/2:canvasI.img.x;
+                        canvasI.minY = canvasI.img.centered?(height - canvasI.mask.height)/2:canvasI.img.y;
                         canvasI.width = canvasI.mask.width;
                         canvasI.height = canvasI.mask.height;
                     }
