@@ -41,18 +41,19 @@ Direct inqueries to tsa6games@gmail.com
                 hue: [45, 60],
                 sat: [0, 0],
                 bri: [20,80],
-                poly: [
+                base: true
+                /*poly: [
                     {x:0    ,y:0   },
                     {x:1920 ,y:0   },
                     {x:1920 ,y:1080},
                     {x:0    ,y:1080}
-                ]
+                ]*/
             },{
                 hue: [0, 360],
                 sat: [40, 40],
                 bri: [100,100],
                 img: {
-                    url: "https://i.imgur.com/XUIvn2G.png",
+                    url: "https://i.imgur.com/Nb6vhTw.png",
                     centered: true,
                     x: 0,
                     y: 0
@@ -73,7 +74,14 @@ Direct inqueries to tsa6games@gmail.com
                 for(var i = 0; i < canvases.length; i++) {
                     canvasI = canvases[i];
                     
-                    if(canvasI.poly) {
+                    if(canvasI.base) {
+                        canvasI.minX = 0;
+                        canvasI.width = width;
+                        canvasI.minY = 0;
+                        canvasI.height = height;
+                        canvasI.mask = null;
+                        canvasI.graphics = this; //!mask means rendered on main canvas, i.e. it's a base layer
+                    }else if(canvasI.poly) {
                         canvasI.minX = canvasI.poly.reduce(
                             function(min, p){
                                 return Math.min(min, p.x)
@@ -104,13 +112,14 @@ Direct inqueries to tsa6games@gmail.com
                         }
                         g.endShape();
                         canvasI.mask = g.get();
+                        canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
                     }else if(canvasI.img) {
-                        canvasI.minX = canvasI.img.centered?(width - canvasI.mask.width)/2:canvasI.img.x;
-                        canvasI.minY = canvasI.img.centered?(height - canvasI.mask.height)/2:canvasI.img.y;
+                        canvasI.minX = canvasI.img.centered?floor((width - canvasI.mask.width)/2):canvasI.img.x;
+                        canvasI.minY = canvasI.img.centered?floor((height - canvasI.mask.height)/2):canvasI.img.y;
                         canvasI.width = canvasI.mask.width;
                         canvasI.height = canvasI.mask.height;
+                        canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
                     }
-                    canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
                 }
                 resetSpawnInterval();
             }
@@ -125,9 +134,11 @@ Direct inqueries to tsa6games@gmail.com
                 }
                 for(var i = 0; i < canvases.length; i++) {
                     var c = canvases[i];
-                    var img = c.graphics.get();
-                    img.mask(c.mask);
-                    image(img, c.minX, c.minY)
+                    if(c.mask) { //!mask means rendered on main canvas, i.e. it's a base layer
+                        var img = c.graphics.get();
+                        img.mask(c.mask);
+                        image(img, c.minX, c.minY)
+                    }
                 }
             }
             
