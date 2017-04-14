@@ -37,9 +37,64 @@ Direct inqueries to tsa6games@gmail.com
             
             var shapes = [];
             var spawnIntervalId;
+            var canvases = [{
+                hue: [45, 60],
+                sat: [17, 20],
+                bri: [85,100],
+                poly: [
+                    {x:0    ,y:0   },
+                    {x:1920 ,y:0   },
+                    {x:1920 ,y:1080},
+                    {x:0    ,y:1080}
+                ]
+            },{
+                hue: [110, 130],
+                sat: [40, 40],
+                bri: [40,71],
+                poly: [
+                    {x:960  ,y:0   },
+                    {x:1500 ,y:540 },
+                    {x:960  ,y:1080},
+                    {x:420  ,y:540 }
+                ]
+            }];
             
             function setup() {
                 createCanvas(windowWidth, windowHeight);
+                for(var i = 0; i < canvases.length; i++) {
+                    canvasI = canvases[i];
+                    canvasI.minX = canvasI.poly.reduce(
+                        function(min, p){
+                            return Math.min(min, p.x)
+                        }, 0
+                    );
+                    canvasI.width = canvasI.poly.reduce(
+                        function(max, p){
+                            return Math.max(max, p.x)
+                        }, 0
+                    ) - canvasI.minX;
+                    canvasI.minY = canvasI.poly.reduce(
+                        function(min, p){
+                            return Math.min(min, p.y)
+                        }, 0
+                    );
+                    canvasI.height = canvasI.poly.reduce(
+                        function(max, p){
+                            return Math.max(max, p.y)
+                        }, 0
+                    ) - canvasI.minY;
+                    
+                    canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
+                    var g = createGraphics(canvasI.width, canvasI.height)
+                    g.fill(0);
+                    g.noStroke();
+                    g.beginShape();
+                    for(var j = 0; j < canvasI.poly.length; j++) {
+                        g.vertex(canvasI.poly[j].x - canvasI.minX, canvasI.poly[j].y - canvasI.minY);
+                    }
+                    g.endShape();
+                    canvasI.mask = g.get();
+                }
                 resetSpawnInterval();
             }
             
@@ -50,6 +105,12 @@ Direct inqueries to tsa6games@gmail.com
                     if(shape.currentPercent >= 1) {
                         shapes.splice(i, 1)
                     }
+                }
+                for(var i = 0; i < canvases.length; i++) {
+                    var c = canvases[i];
+                    var img = c.graphics.get();
+                    img.mask(c.mask);
+                    image(img, c.minX, c.minY)
                 }
             }
             
@@ -68,9 +129,13 @@ Direct inqueries to tsa6games@gmail.com
             }
             
             function Shape() {
-                this.color = generateColor();
+                this.colors = [];
                 this.currentPercent = 0;
                 this.bezierPoints = [[0,0,.5,1],[0,0.6,1,1]]
+                
+                for(var i = 0; i < canvases.length; i++) {
+                    this.colors[i] = generateColor(canvases[i]);
+                }
                 
                 switch(MODE) {
                     case 0:
@@ -88,12 +153,17 @@ Direct inqueries to tsa6games@gmail.com
                 }
                 
                 this._draw = function(mappedPercent) {
-                    switch(MODE) {
-                        case 0:
-                            fill(this.color)
-                            noStroke();
-                            ellipse(this.x, this.y, mappedPercent * 2 * this.r);
-                            break;
+                    for(var i = 0; i < canvases.length; i++) {
+                        var c = canvases[i];
+                        var g = c.graphics;
+                        var color = this.colors[i];
+                        switch(MODE) {
+                            case 0:
+                                    g.fill(color)
+                                    g.noStroke();
+                                    g.ellipse(this.x - c.minX, this.y - c.minY, mappedPercent * 2 * this.r);
+                                    break;
+                        }
                     }
                 }
             
@@ -103,14 +173,14 @@ Direct inqueries to tsa6games@gmail.com
                 
             }
             
-            function generateColor() {
+            function generateColor(canvas) {
                 colorMode(HSB,360,100,100);
-                var hue = random(HUE_MIN,HUE_MAX)%360;
+                var hue = random(canvas.hue[0],canvas.hue[1])%360;
                 hue = hue<0?hue+360:hue;
                 return color(
                     hue,
-                    random(SAT_MIN,SAT_MAX)%360,
-                    random(BRI_MIN,BRI_MAX)%360
+                    random(canvas.sat[0],canvas.sat[1])%360,
+                    random(canvas.bri[0],canvas.bri[1])%360
                 )
             }
             
