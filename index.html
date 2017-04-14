@@ -233,7 +233,8 @@ Direct inqueries to tsa6games@gmail.com
                 
                 if(FREQ) {
                     spawnIntervalId = setInterval(function() {
-                        shapes[shapes.length] = new Shape();
+                        if(shapes.length < 100)
+                            shapes[shapes.length] = new Shape();
                     }, 1e3/(Math.pow(3.7,FREQ/10)*1e-9*width*height + 3e-3));
                 }
             }
