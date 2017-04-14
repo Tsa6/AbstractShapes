@@ -39,8 +39,8 @@ Direct inqueries to tsa6games@gmail.com
             var spawnIntervalId;
             var canvases = [{
                 hue: [45, 60],
-                sat: [17, 20],
-                bri: [85,100],
+                sat: [0, 0],
+                bri: [20,80],
                 poly: [
                     {x:0    ,y:0   },
                     {x:1920 ,y:0   },
@@ -48,52 +48,68 @@ Direct inqueries to tsa6games@gmail.com
                     {x:0    ,y:1080}
                 ]
             },{
-                hue: [110, 130],
+                hue: [0, 360],
                 sat: [40, 40],
-                bri: [40,71],
-                poly: [
-                    {x:960  ,y:0   },
-                    {x:1500 ,y:540 },
-                    {x:960  ,y:1080},
-                    {x:420  ,y:540 }
-                ]
+                bri: [100,100],
+                img: {
+                    url: "http://i.imgur.com/3FSu0pb.png",
+                    x: 0,
+                    y: 0
+                }
             }];
+            
+            function preload() {
+                for(var i = 0; i < canvases.length; i++) {
+                    var c = canvases[i];
+                    if(c.img) {
+                        c.mask = loadImage(c.img);
+                    }
+                }
+            }
             
             function setup() {
                 createCanvas(windowWidth, windowHeight);
                 for(var i = 0; i < canvases.length; i++) {
                     canvasI = canvases[i];
-                    canvasI.minX = canvasI.poly.reduce(
-                        function(min, p){
-                            return Math.min(min, p.x)
-                        }, 0
-                    );
-                    canvasI.width = canvasI.poly.reduce(
-                        function(max, p){
-                            return Math.max(max, p.x)
-                        }, 0
-                    ) - canvasI.minX;
-                    canvasI.minY = canvasI.poly.reduce(
-                        function(min, p){
-                            return Math.min(min, p.y)
-                        }, 0
-                    );
-                    canvasI.height = canvasI.poly.reduce(
-                        function(max, p){
-                            return Math.max(max, p.y)
-                        }, 0
-                    ) - canvasI.minY;
                     
-                    canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
-                    var g = createGraphics(canvasI.width, canvasI.height)
-                    g.fill(0);
-                    g.noStroke();
-                    g.beginShape();
-                    for(var j = 0; j < canvasI.poly.length; j++) {
-                        g.vertex(canvasI.poly[j].x - canvasI.minX, canvasI.poly[j].y - canvasI.minY);
+                    if(canvasI.poly) {
+                        canvasI.minX = canvasI.poly.reduce(
+                            function(min, p){
+                                return Math.min(min, p.x)
+                            }, 0
+                        );
+                        canvasI.width = canvasI.poly.reduce(
+                            function(max, p){
+                                return Math.max(max, p.x)
+                            }, 0
+                        ) - canvasI.minX;
+                        canvasI.minY = canvasI.poly.reduce(
+                            function(min, p){
+                                return Math.min(min, p.y)
+                            }, 0
+                        );
+                        canvasI.height = canvasI.poly.reduce(
+                            function(max, p){
+                                return Math.max(max, p.y)
+                            }, 0
+                        ) - canvasI.minY;
+                        
+                        var g = createGraphics(canvasI.width, canvasI.height)
+                        g.fill(0);
+                        g.noStroke();
+                        g.beginShape();
+                        for(var j = 0; j < canvasI.poly.length; j++) {
+                            g.vertex(canvasI.poly[j].x - canvasI.minX, canvasI.poly[j].y - canvasI.minY);
+                        }
+                        g.endShape();
+                        canvasI.mask = g.get();
+                    }else if(canvasI.img) {
+                        canvasI.minX = 0;
+                        canvasI.minY = 0;
+                        canvasI.width = canvasI.mask.width;
+                        canvasI.height = canvasI.mask.height;
                     }
-                    g.endShape();
-                    canvasI.mask = g.get();
+                    canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
                 }
                 resetSpawnInterval();
             }
