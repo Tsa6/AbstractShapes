@@ -250,23 +250,47 @@ Direct inqueries to tsa6games@gmail.com
             
             wallpaperPropertyListener = {
                 applyUserProperties: function(props) {
-                    if(props.hueMin) {
-                        HUE_MIN = props.hueMin.value;
+                    if(props.enabled1) {
+                        canvases[0].hidden = !props.enabled1.value;
                     }
-                    if(props.hueMax) {
-                        HUE_MAX = props.hueMax.value;
+                    if(props.hueMin1) {
+                        canvases[0].hue[0] = props.hueMin1.value;
                     }
-                    if(props.satMin) {
-                        SAT_MIN = props.satMin.value;
+                    if(props.hueMax1) {
+                        canvases[0].hue[1] = props.hueMax1.value;
                     }
-                    if(props.satMax) {
-                        SAT_MAX = props.satMax.value;
+                    if(props.satMin1) {
+                        canvases[0].sat[0] = props.satMin1.value;
                     }
-                    if(props.briMin) {
-                        BRI_MIN = props.briMin.value;
+                    if(props.satMax1) {
+                        canvases[0].sat[1] = props.satMax1.value;
                     }
-                    if(props.briMax) {
-                        BRI_MAX = props.briMax.value;
+                    if(props.briMin1) {
+                        canvases[0].bri[0] = props.briMin1.value;
+                    }
+                    if(props.briMax1) {
+                        canvases[0].bri[1] = props.briMax1.value;
+                    }
+                    if(props.enabled2) {
+                        canvases[1].hidden = !props.enabled2.value;
+                    }
+                    if(props.hueMin2) {
+                        canvases[1].hue[0] = props.hueMin2.value;
+                    }
+                    if(props.hueMax2) {
+                        canvases[1].hue[1] = props.hueMax2.value;
+                    }
+                    if(props.satMin2) {
+                        canvases[1].sat[0] = props.satMin2.value;
+                    }
+                    if(props.satMax2) {
+                        canvases[1].sat[1] = props.satMax2.value;
+                    }
+                    if(props.briMin2) {
+                        canvases[1].bri[0] = props.briMin2.value;
+                    }
+                    if(props.briMax2) {
+                        canvases[1].bri[1] = props.briMax2.value;
                     }
                     if(props.freq) {
                         FREQ = props.freq.value;

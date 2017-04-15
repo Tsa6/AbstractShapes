@@ -21,99 +21,177 @@
                         "value": 0
                     },
                     {
-                        "label": "Colors",
+                        "label": "Layer 1",
                         "value": 1
                     },
                     {
-                        "label": "Spawning",
+                        "label": "Layer 2",
                         "value": 2
+                    },
+                    {
+                        "label": "Spawning",
+                        "value": 3
                     }
                 ]
             },
-            "hueMin": {
+            "enabled1": {
                 "order": 100,
+                "text": "Enabled",
+                "type": "bool",
+                "value": true,
+                "condition": "menu.value === 1"
+            },
+            "hueMin1": {
+                "order": 101,
                 "text": "Minimum Hue",
                 "type": "slider",
                 "value": 0,
                 "min": -360,
                 "max": 360,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 1 && enabled1.value"
             },
-            "hueMax": {
-                "order": 101,
+            "hueMax1": {
+                "order": 102,
                 "text": "Maximum Hue",
                 "type": "slider",
                 "value": 360,
                 "min": -360,
                 "max": 360,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 1 && enabled1.value"
             },
-            "satMin": {
-                "order": 102,
+            "satMin1": {
+                "order": 103,
+                "text": "Minimum Saturation",
+                "type": "slider",
+                "value": 0,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1 && enabled1.value"
+            },
+            "satMax1": {
+                "order": 104,
+                "text": "Maximum Saturation",
+                "type": "slider",
+                "value": 0,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1 && enabled1.value"
+            },
+            "briMin1": {
+                "order": 105,
+                "text": "Minimum Brightness",
+                "type": "slider",
+                "value": 20,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1 && enabled1.value"
+            },
+            "briMax1": {
+                "order": 106,
+                "text": "Maximum Brightness",
+                "type": "slider",
+                "value": 80,
+                "min": 0,
+                "max": 100,
+                "editable": true,
+                "condition": "menu.value === 1 && enabled1.value"
+            },
+            "enabled2": {
+                "order": 200,
+                "text": "Enabled",
+                "type": "bool",
+                "value": true,
+                "condition": "menu.value === 2"
+            },
+            "hueMin2": {
+                "order": 201,
+                "text": "Minimum Hue",
+                "type": "slider",
+                "value": 0,
+                "min": -360,
+                "max": 360,
+                "editable": true,
+                "condition": "menu.value === 2 && enabled2.value"
+            },
+            "hueMax2": {
+                "order": 202,
+                "text": "Maximum Hue",
+                "type": "slider",
+                "value": 360,
+                "min": -360,
+                "max": 360,
+                "editable": true,
+                "condition": "menu.value === 2 && enabled2.value"
+            },
+            "satMin2": {
+                "order": 203,
                 "text": "Minimum Saturation",
                 "type": "slider",
                 "value": 40,
                 "min": 0,
                 "max": 100,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 2 && enabled2.value"
             },
-            "satMax": {
-                "order": 103,
+            "satMax2": {
+                "order": 204,
                 "text": "Maximum Saturation",
                 "type": "slider",
                 "value": 40,
                 "min": 0,
                 "max": 100,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 2 && enabled2.value"
             },
-            "briMin": {
-                "order": 104,
+            "briMin2": {
+                "order": 205,
                 "text": "Minimum Brightness",
                 "type": "slider",
                 "value": 100,
                 "min": 0,
                 "max": 100,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 2 && enabled2.value"
             },
-            "briMax": {
-                "order": 105,
+            "briMax2": {
+                "order": 206,
                 "text": "Maximum Brightness",
                 "type": "slider",
                 "value": 100,
                 "min": 0,
                 "max": 100,
                 "editable": true,
-                "condition": "menu.value === 1"
+                "condition": "menu.value === 2 && enabled2.value"
             },
             "freq": {
-                "order": 200,
+                "order": 300,
                 "text": "Spawn Rate",
                 "type": "slider",
                 "value": 60,
                 "min": 0,
                 "max": 100,
-                "condition": "menu.value === 2"
+                "condition": "menu.value === 3"
             },
             "enableOnClick": {
-                "order": 201,
+                "order": 301,
                 "text": "Spawn on click",
                 "type": "bool",
                 "value": true,
-                "condition": "menu.value === 2"
+                "condition": "menu.value === 3"
             },
             "speed": {
-                "order": 202,
+                "order": 302,
                 "text": "Growth Speed",
                 "type": "slider",
                 "value": 10,
                 "min": 1,
                 "max": 100,
-                "condition": "menu.value === 2"
+                "condition": "menu.value === 3"
             },
 			"schemecolor" : 
 			{
