@@ -21,8 +21,7 @@ Direct inqueries to tsa6games@gmail.com
     <body>
         <script src="p5.min.js"></script>
         <script>
-            
-            var SPEED = 0.01;
+            var SPEED = 0.6; //Percent per second
             var MODE = 0;
             var R_MIN = 10;
             var R_MAX = 100;
@@ -167,7 +166,7 @@ Direct inqueries to tsa6games@gmail.com
                 
                 this.draw = function() {
                     if(this.currentPercent < 1) {
-                        this.currentPercent += SPEED;
+                        this.currentPercent += SPEED / frameRate();
                         for(var i = 0; i < canvases.length; i++) {
                             if(!canvases[i].hidden) {
                                 canvases[i].graphics.fill(this.colors[i])
@@ -294,7 +293,12 @@ Direct inqueries to tsa6games@gmail.com
                         ENABLE_ON_CLICK = props.enableOnClick.value;
                     }
                     if(props.speed) {
-                        SPEED = props.speed.value/1000;
+                        SPEED = props.speed.value/1000*60;
+                    }
+                },
+                applyGeneralProperties: function(props) {
+                    if(props.fps) {
+                        frameRate(props.fps);
                     }
                 }
             }
