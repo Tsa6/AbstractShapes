@@ -68,15 +68,13 @@ Direct inqueries to tsa6games@gmail.com
                 for(var i = 0; i < canvases.length; i++) {
                     canvasI = canvases[i];
                     
-                    if(canvasI.hidden){
-                        //Nothing
-                    }else if(canvasI.base) {
+                    if(canvasI.base) {
                         canvasI.minX = 0;
                         canvasI.width = width;
                         canvasI.minY = 0;
                         canvasI.height = height;
-                        canvasI.mask = null;
-                        canvasI.graphics = this; //!mask means rendered on main canvas, i.e. it's a base layer
+                        canvasI.mask = null;//!mask means rendered on main canvas, i.e. it's a base layer
+                        canvasI.graphics = this; 
                     }else if(canvasI.poly) {
                         canvasI.minX = canvasI.poly.reduce(
                             function(min, p){
@@ -171,24 +169,21 @@ Direct inqueries to tsa6games@gmail.com
                 this.draw = function() {
                     if(this.currentPercent < 1) {
                         this.currentPercent += SPEED;
-                        this._draw(this._mapPercent(this.currentPercent));
+                        for(var i = 0; i < canvases.length; i++) {
+                            if(!canvases[i].hidden) {
+                                canvases[i].graphics.fill(this.colors[i])
+                                canvases[i].graphics.noStroke();
+                                this._draw(this._mapPercent(this.currentPercent), canvases[i]);
+                            }
+                        }
                     }
                 }
                 
-                this._draw = function(mappedPercent) {
-                    for(var i = 0; i < canvases.length; i++) {
-                        var c = canvases[i];
-                        if(!c.hidden) {
-                            var g = c.graphics;
-                            var color = this.colors[i];
-                            switch(MODE) {
-                                case 0:
-                                    g.fill(color)
-                                    g.noStroke();
-                                    g.ellipse(this.x - c.minX, this.y - c.minY, mappedPercent * 2 * this.r);
-                                    break;
-                            }
-                        }
+                this._draw = function(mappedPercent, canvas) {
+                    switch(MODE) {
+                        case 0:
+                            canvas.graphics.ellipse(this.x - canvas.minX, this.y - canvas.minY, mappedPercent * 2 * this.r);
+                            break;
                     }
                 }
             
