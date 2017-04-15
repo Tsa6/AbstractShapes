@@ -68,7 +68,9 @@ Direct inqueries to tsa6games@gmail.com
                 for(var i = 0; i < canvases.length; i++) {
                     canvasI = canvases[i];
                     
-                    if(canvasI.base) {
+                    if(canvasI.hidden){
+                        //Nothing
+                    }else if(canvasI.base) {
                         canvasI.minX = 0;
                         canvasI.width = width;
                         canvasI.minY = 0;
@@ -128,7 +130,7 @@ Direct inqueries to tsa6games@gmail.com
                 }
                 for(var i = 0; i < canvases.length; i++) {
                     var c = canvases[i];
-                    if(c.mask) { //!mask means rendered on main canvas, i.e. it's a base layer
+                    if(c.mask && !c.hidden) { //!mask means rendered on main canvas, i.e. it's a base layer
                         var img = c.graphics.get();
                         img.mask(c.mask);
                         image(img, c.minX, c.minY)
@@ -176,14 +178,16 @@ Direct inqueries to tsa6games@gmail.com
                 this._draw = function(mappedPercent) {
                     for(var i = 0; i < canvases.length; i++) {
                         var c = canvases[i];
-                        var g = c.graphics;
-                        var color = this.colors[i];
-                        switch(MODE) {
-                            case 0:
+                        if(!c.hidden) {
+                            var g = c.graphics;
+                            var color = this.colors[i];
+                            switch(MODE) {
+                                case 0:
                                     g.fill(color)
                                     g.noStroke();
                                     g.ellipse(this.x - c.minX, this.y - c.minY, mappedPercent * 2 * this.r);
                                     break;
+                            }
                         }
                     }
                 }
