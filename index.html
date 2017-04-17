@@ -65,7 +65,7 @@ Direct inqueries to tsa6games@gmail.com
             function setup() {
                 createCanvas(windowWidth, windowHeight);
                 for(var i = 0; i < canvases.length; i++) {
-                    canvasI = canvases[i];
+                    var canvasI = canvases[i];
                     
                     if(canvasI.base) {
                         canvasI.minX = 0;
@@ -111,7 +111,9 @@ Direct inqueries to tsa6games@gmail.com
                         canvasI.minY = canvasI.img.centered?floor((height - canvasI.mask.height)/2):canvasI.img.y;
                         canvasI.width = canvasI.mask.width;
                         canvasI.height = canvasI.mask.height;
-                        canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
+                        canvasI.graphics = createGraphics(canvasI.width, canvasI.height);
+                        canvasI.graphicsImage = canvasI.graphics.get();
+                        canvasI.graphicsImage.loadPixels();
                     }
                 }
                 resetSpawnInterval();
@@ -127,9 +129,11 @@ Direct inqueries to tsa6games@gmail.com
                 for(var i = 0; i < canvases.length; i++) {
                     var c = canvases[i];
                     if(c.mask && !c.hidden) { //!mask means rendered on main canvas, i.e. it's a base layer
-                        var img = c.graphics.get();
-                        img.mask(c.mask);
-                        image(img, c.minX, c.minY)
+                        c.graphics.loadPixels();
+                        c.graphicsImage.pixels.set(c.graphics.pixels);
+                        c.graphicsImage.updatePixels()
+                        c.graphicsImage.mask(c.mask);
+                        image(c.graphicsImage, c.minX, c.minY);
                     }
                 }
             }
