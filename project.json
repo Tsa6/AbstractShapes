@@ -168,6 +168,73 @@
                 "editable": true,
                 "condition": "menu.value === 2 && enabled2.value"
             },
+            "mask": {
+                "order": 207,
+                "text": "Mask",
+                "type": "combo",
+                "value": "https://i.imgur.com/d8wKlpa.png",
+                "options": [
+                    {
+                        "value": "https://i.imgur.com/d8wKlpa.png",
+                        "label": "Heart"
+                    },
+                    {
+                        "value": "http://www.clipartbest.com/cliparts/Rid/gyK/RidgyKrKT.png",
+                        "label": "Sheild"
+                    },
+                    {
+                        "value": "http://i.imgur.com/O1uunqJ.png",
+                        "label": "Horizontal Bar"
+                    },
+                    {
+                        "value": "https://i.imgur.com/xHwCDTc.png",
+                        "label": "Star"
+                    },
+                    {
+                        "value": "https://i.imgur.com/JpsxTdT.png",
+                        "label": "Split [1920x1080]"
+                    },
+                    {
+                        "value": "Custom",
+                        "label": "Custom"
+                    }
+                ],
+                "condition": "menu.value === 2 && enabled2.value"
+            },
+            "maskCustom": {
+                "order": 208,
+                "text": "Mask URL",
+                "type": "textinput",
+                "value": "https://i.imgur.com/aDRaK9E.png",
+                "condition": "menu.value === 2 && mask.value === 'Custom' && enabled2.value"
+            },
+            "maskCentered": {
+                "order": 209,
+                "text": "Center Image",
+                "type": "bool",
+                "value": true,
+                "condition": "menu.value === 2 && mask.value === 'Custom' && enabled2.value"
+            },
+            "maskX": {
+                "order": 210,
+                "text": "Mask X-Offset",
+                "type": "slider",
+                "value":0,
+                "min": 0,
+                "max": 1920,
+                "editable": true,
+                "condition": "menu.value === 2 && mask.value === 'Custom' && enabled2.value && !maskCentered.value"
+            },
+            "maskY": {
+                "order": 211,
+                "text": "Mask Y-Offset",
+                "type": "slider",
+                "value":0,
+                "min": 0,
+                "max": 1080,
+                "editable": true,
+                "condition": "menu.value === 2 && mask.value === 'Custom' && enabled2.value && !maskCentered.value"
+            },
             "freq": {
                 "order": 300,
                 "text": "Spawn Rate",

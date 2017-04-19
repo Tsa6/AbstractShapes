@@ -21,12 +21,20 @@ Direct inqueries to tsa6games@gmail.com
     <body>
         <script src="p5.min.js"></script>
         <script>
+            //Constants that actually matter
             var SPEED = 0.6; //Percent per second
             var MODE = 0;
             var R_MIN = 10;
             var R_MAX = 100;
             var FREQ = 60; //Value between 0 and 100, logarithmicly controls spawn rate
             var ENABLE_ON_CLICK = true;
+            
+            //Constants that track user info so aren't really constants now are they
+            var CUSTOM_MASK_URL;
+            var MASK_PRESET_URL;
+            var CENTER_MASK = true;
+            var MASK_X;
+            var MASK_Y;
             
             var shapes = [];
             var spawnIntervalId;
@@ -62,10 +70,18 @@ Direct inqueries to tsa6games@gmail.com
                 }
             }
             
-            function setup() {
-                createCanvas(windowWidth, windowHeight);
+            function setup(noRecreate) {
+                if(!noRecreate)
+                    createCanvas(windowWidth, windowHeight);
+                
                 for(var i = 0; i < canvases.length; i++) {
                     var canvasI = canvases[i];
+                
+                    if(canvasI.graphics && canvasI.graphics !== this) {
+                        canvasI.graphics.remove();
+                        console.log(_elements.indexOf(canvasI.graphics));
+                        _elements.splice(_elements.indexOf(canvasI.graphics), 1)
+                    }
                     
                     if(canvasI.base) {
                         canvasI.minX = 0;
@@ -96,6 +112,7 @@ Direct inqueries to tsa6games@gmail.com
                             }, 0
                         ) - canvasI.minY;
                         
+                        
                         var g = createGraphics(canvasI.width, canvasI.height)
                         g.fill(0);
                         g.noStroke();
@@ -105,6 +122,7 @@ Direct inqueries to tsa6games@gmail.com
                         }
                         g.endShape();
                         canvasI.mask = g.get();
+                        g.remove();
                         canvasI.graphics = createGraphics(canvasI.width, canvasI.height)
                     }else if(canvasI.img) {
                         canvasI.minX = canvasI.img.centered?floor((width - canvasI.mask.width)/2):canvasI.img.x;
@@ -114,6 +132,14 @@ Direct inqueries to tsa6games@gmail.com
                         canvasI.graphics = createGraphics(canvasI.width, canvasI.height);
                         canvasI.graphicsImage = canvasI.graphics.get();
                         canvasI.graphicsImage.loadPixels();
+                        
+                        //Max out opacity on all non-transparent-pixels
+                        canvasI.mask.loadPixels();
+                        var p = canvasI.mask.pixels;
+                        for(var j = 3; j < p.length; j+= 4) {
+                            p[j] = ceil(p[j]/255)*255;
+                        }
+                        canvasI.mask.updatePixels();
                     }
                 }
                 resetSpawnInterval();
@@ -245,6 +271,25 @@ Direct inqueries to tsa6games@gmail.com
                 }
             }
             
+            function updateUserPropertiesReloadMaskImageFunctionNameHowsThatForASpecificNameInterrobang() {
+                var url = MASK_PRESET_URL;
+                var x = -1;
+                var y = -1;
+                var centered = true;
+                if(MASK_PRESET_URL === "Custom"){
+                    url = CUSTOM_MASK_URL;
+                    x = MASK_X;
+                    y = MASK_Y;
+                    centered = CENTER_MASK;
+                }
+                
+                canvases[1].img.url = url;
+                canvases[1].img.centered = centered;
+                canvases[1].img.x = x;
+                canvases[1].img.y = y;
+                canvases[1].mask = loadImage(url, function(){setup(true)});
+            }
+            
             wallpaperPropertyListener = {
                 applyUserProperties: function(props) {
                     if(props.enabled1) {
@@ -289,6 +334,21 @@ Direct inqueries to tsa6games@gmail.com
                     if(props.briMax2) {
                         canvases[1].bri[1] = props.briMax2.value;
                     }
+                    if(props.mask) {
+                        MASK_PRESET_URL = props.mask.value;
+                    }
+                    if(props.maskCustom) {
+                        CUSTOM_MASK_URL = props.maskCustom.value;
+                    }
+                    if(props.maskCentered) {
+                        CENTER_MASK = props.maskCentered.value;
+                    }
+                    if(props.maskX) {
+                        MASK_X = props.maskX.value;
+                    }
+                    if(props.maskY) {
+                        MASK_Y = props.maskY.value;
+                    }
                     if(props.freq) {
                         FREQ = props.freq.value;
                         resetSpawnInterval();
@@ -299,6 +359,9 @@ Direct inqueries to tsa6games@gmail.com
                     if(props.speed) {
                         SPEED = props.speed.value/1000*60;
                     }
+                    
+                    if(props.mask || props.maskCustom || props.maskX || props.maskY || props.maskCentered)
+                        updateUserPropertiesReloadMaskImageFunctionNameHowsThatForASpecificNameInterrobang()
                 },
                 applyGeneralProperties: function(props) {
                     if(props.fps) {
